@@ -1,5 +1,6 @@
 package com.jiangtj.mailsender;
 
+import com.jiangtj.mailsender.render.AsciidocRender;
 import com.jiangtj.mailsender.render.MarkdownRender;
 import com.jiangtj.mailsender.render.Render;
 import com.jiangtj.mailsender.render.RenderHandler;
@@ -18,6 +19,11 @@ public class SenderConfiguration {
     @Bean
     public MarkdownRender markdownRender(){
         return new MarkdownRender();
+    }
+
+    @Bean
+    public AsciidocRender asciidocRender(){
+        return new AsciidocRender();
     }
 
     @Bean
