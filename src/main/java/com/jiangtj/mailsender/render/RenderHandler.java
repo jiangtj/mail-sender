@@ -35,7 +35,7 @@ public class RenderHandler {
         List<String> names = render.name();
         if (CollectionUtils.isEmpty(names)) {
             String name = render.getClass().getSimpleName();
-            return Collections.singletonList(name.replace("Render", ""));
+            return Collections.singletonList(name.replace("Render", "").toLowerCase());
         }
         return names;
     }
