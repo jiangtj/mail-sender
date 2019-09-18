@@ -1,7 +1,9 @@
-package com.jiangtj.mailsender.render;
+package com.jiangtj.mailsender.hander;
 
 import com.jiangtj.mailsender.KeyValue;
+import com.jiangtj.mailsender.render.Render;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
@@ -13,6 +15,7 @@ import java.util.stream.Collectors;
  * Created by jiang (jiang.taojie@foxmail.com)
  * 2019/9/12 20:37 End.
  */
+@Slf4j
 public class RenderHandler {
 
     @Getter

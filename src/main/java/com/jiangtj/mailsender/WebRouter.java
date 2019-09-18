@@ -1,7 +1,7 @@
 package com.jiangtj.mailsender;
 
 import com.jiangtj.mailsender.dto.SendDto;
-import com.jiangtj.mailsender.render.RenderHandler;
+import com.jiangtj.mailsender.hander.RenderHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

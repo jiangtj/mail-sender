@@ -1,5 +1,6 @@
-package com.jiangtj.mailsender;
+package com.jiangtj.mailsender.hander;
 
+import com.jiangtj.mailsender.SenderProperties;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
