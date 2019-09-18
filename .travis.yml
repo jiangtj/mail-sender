@@ -5,6 +5,8 @@ jdk:
   - openjdk9
   - openjdk12
 
+install: skip
+
 script:
   - ./mvnw test -B
 
