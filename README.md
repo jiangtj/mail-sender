@@ -1,5 +1,5 @@
 # Mail Sender
-
+[![Build Status](https://www.travis-ci.org/jiangtj/mail-sender.svg?branch=master)](https://www.travis-ci.org/jiangtj/mail-sender)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0ade707e15e4443fa5ec79eaa0e0145d)](https://www.codacy.com/manual/116749895/mail-sender?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jiangtj/mail-sender&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/0ade707e15e4443fa5ec79eaa0e0145d)](https://www.codacy.com/manual/116749895/mail-sender?utm_source=github.com&utm_medium=referral&utm_content=jiangtj/mail-sender&utm_campaign=Badge_Coverage)
 
