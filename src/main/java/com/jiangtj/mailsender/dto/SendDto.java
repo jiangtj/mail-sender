@@ -10,4 +10,5 @@ import lombok.Data;
 public class SendDto {
     private String render;
     private String content;
+    private TemplateDto template;
 }

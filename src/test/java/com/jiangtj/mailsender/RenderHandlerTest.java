@@ -4,7 +4,6 @@ import com.jiangtj.mailsender.hander.RenderHandler;
 import com.jiangtj.mailsender.render.AsciidocRender;
 import com.jiangtj.mailsender.render.MarkdownRender;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -20,10 +19,6 @@ import static org.junit.Assert.assertEquals;
 public class RenderHandlerTest {
 
     private RenderHandler renderHandler;
-
-    @Before
-    public void setUp() {
-    }
 
     @Test
     public void testErrorRender() {

@@ -1,10 +1,12 @@
 package com.jiangtj.mailsender.hander;
 
+import com.jiangtj.mailsender.SenderException;
 import com.jiangtj.mailsender.SenderProperties;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ResourceUtils;
 
 import java.io.IOException;
@@ -15,6 +17,7 @@ import java.util.Map;
  * Created by MrTT (jiang.taojie@foxmail.com)
  * 2019/9/18.
  */
+@Slf4j
 public class TemplateHandler {
 
     private Configuration cfg;
@@ -30,13 +33,18 @@ public class TemplateHandler {
         this.cfg = cfg;
     }
 
-    public String handle(String name, Map<String,Object> params) throws IOException, TemplateException {
+    public String handle(String name, Map<String,Object> params) {
         StringWriter writer = new StringWriter();
         if (!name.contains(".")) {
             name = name + ".ftlh";
         }
-        Template temp = cfg.getTemplate(name);
-        temp.process(params, writer);
+        try {
+            Template temp = cfg.getTemplate(name);
+            temp.process(params, writer);
+        } catch (IOException | TemplateException e) {
+            log.error("TemplateException", e);
+            throw new SenderException("System Error!");
+        }
         return writer.toString();
     }
 
