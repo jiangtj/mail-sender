@@ -8,10 +8,8 @@ import lombok.Data;
  */
 @Data
 public class Record {
-
     private String addressee;
     private String sender;
     private String title;
     private String content;
-
 }

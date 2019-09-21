@@ -1,6 +1,6 @@
 package com.jiangtj.mailsender;
 
-import com.jiangtj.mailsender.dto.SendDto;
+import com.jiangtj.mailsender.dto.SendRequestBody;
 import com.jiangtj.mailsender.dto.TemplateDto;
 import com.jiangtj.mailsender.model.Record;
 import org.junit.Test;
@@ -35,17 +35,15 @@ public class MailSenderApplicationTests {
 
     @Test
     public void send() {
-        Mono<SendDto> body = Mono.just(new TemplateDto())
+        Mono<SendRequestBody> body = Mono.just(new TemplateDto())
                 .doOnNext(templateDto -> templateDto.setName("simple"))
-                .map(templateDto -> {
-                    SendDto sendDto = new SendDto();
-                    sendDto.setRender("md");
-                    sendDto.setContent("test *YYYY*, [my blog](https://www.dnocm.com)");
-                    sendDto.setTemplate(templateDto);
-                    return sendDto;
-                });
+                .map(templateDto -> SendRequestBody.builder()
+                        .render("md")
+                        .content("test *YYYY*, [my blog](https://www.dnocm.com)")
+                        .template(templateDto)
+                        .build());
         webTestClient.post().uri("/send")
-                .body(body, SendDto.class)
+                .body(body, SendRequestBody.class)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Record.class)

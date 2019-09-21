@@ -1,6 +1,7 @@
 package com.jiangtj.mailsender;
 
 import com.jiangtj.mailsender.hander.RenderHandler;
+import com.jiangtj.mailsender.hander.SenderHandler;
 import com.jiangtj.mailsender.hander.TemplateHandler;
 import com.jiangtj.mailsender.render.AsciidocRender;
 import com.jiangtj.mailsender.render.MarkdownRender;
@@ -36,6 +37,11 @@ public class SenderConfiguration {
     @Bean
     public TemplateHandler templateHandler(SenderProperties properties) throws IOException {
         return new TemplateHandler(properties);
+    }
+
+    @Bean
+    public SenderHandler senderHandler(RenderHandler renderHandler, TemplateHandler templateHandler) {
+        return new SenderHandler(renderHandler, templateHandler);
     }
 
 }

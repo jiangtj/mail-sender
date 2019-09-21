@@ -2,5 +2,5 @@
 <head>
     <title>Welcome!</title>
 </head>
-<body>${body}</body>
+<body>${body?html}</body>
 </html>

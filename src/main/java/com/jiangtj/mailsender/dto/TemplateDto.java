@@ -10,8 +10,6 @@ import java.util.Map;
  */
 @Data
 public class TemplateDto {
-
     private String name;
     private Map<String, Object> params;
-
 }
