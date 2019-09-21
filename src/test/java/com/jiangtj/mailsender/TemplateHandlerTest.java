@@ -19,7 +19,7 @@ public class TemplateHandlerTest {
 
     @Before
     public void setUp() throws Exception {
-        SenderProperties properties = new SenderProperties();
+        SenderProperties properties = new SenderProperties(null);
         templateHandler = new TemplateHandler(properties);
     }
 
@@ -28,6 +28,14 @@ public class TemplateHandlerTest {
         Map<String, Object> params = new HashMap<>();
         params.put("user", "Jack");
         String handledHtml = templateHandler.handle("test", params);
+        log.info("Handled html:\n" + handledHtml);
+    }
+
+    @Test
+    public void handleHtml() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("body", "<p>test <em>YYYY</em>, <a href=\"https://www.dnocm.com\">my blog</a></p>");
+        String handledHtml = templateHandler.handle("simple", params);
         log.info("Handled html:\n" + handledHtml);
     }
 }

@@ -1,15 +1,21 @@
 package com.jiangtj.mailsender.hander;
 
+import com.jiangtj.mailsender.SenderException;
+import com.jiangtj.mailsender.SenderProperties;
 import com.jiangtj.mailsender.dto.SendRequestBody;
 import com.jiangtj.mailsender.dto.SendStream;
 import com.jiangtj.mailsender.dto.TemplateDto;
-import com.jiangtj.mailsender.model.Record;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,29 +26,29 @@ import java.util.Map;
 @Slf4j
 public class SenderHandler {
 
+    private SenderProperties properties;
+    @Setter
     private RenderHandler renderHandler;
+    @Setter
     private TemplateHandler templateHandler;
+    @Setter
+    private JavaMailSender mailSender;
 
-    public SenderHandler(RenderHandler renderHandler, TemplateHandler templateHandler) {
-        this.renderHandler = renderHandler;
-        this.templateHandler = templateHandler;
+    public SenderHandler(SenderProperties properties) {
+        this.properties = properties;
     }
 
     /**
-     * Send sms
+     * Send mail
      */
     public Mono<ServerResponse> send(ServerRequest request) {
-        Mono<Record> result = request.bodyToMono(SendRequestBody.class)
+        Mono<SendStream> result = request.bodyToMono(SendRequestBody.class)
                 .map(this::handleParams)
                 .doOnNext(this::renderContent)
                 .doOnNext(this::handleTemplate)
-                // Send mail
-                /*.doOnNext(record -> {
-                    //todo 发送邮件
-                });*/
-                .map(SendStream::getRecord);
+                .doOnNext(this::sendMail);
         //.thenReturn("success!");
-        return ServerResponse.ok().body(result, Record.class);
+        return ServerResponse.ok().body(result, SendStream.class);
     }
 
     /**
@@ -86,9 +92,26 @@ public class SenderHandler {
     private void handleTemplate(SendStream stream) {
         TemplateDto template = stream.getTemplate();
         String html = templateHandler.handle(template.getName(), template.getParams());
-        Record record = new Record();
-        record.setContent(html);
-        stream.setRecord(record);
+        stream.setHtml(html);
+    }
+
+    /**
+     * Send mail to people with rendered html.
+     */
+    private void sendMail(SendStream stream) {
+        SendRequestBody requestBody = stream.getRequestBody();
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        try {
+            helper.setTo(requestBody.getTo());
+            helper.setSubject(requestBody.getSubject());
+            helper.setText(stream.getHtml(), true);
+            helper.setFrom(properties.getMail().getUsername());
+        } catch (MessagingException e) {
+            log.error("Mail MessagingException", e);
+            throw new SenderException(e.getMessage());
+        }
+        mailSender.send(message);
     }
 
 }

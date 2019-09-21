@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SendRequestBody {
+    private String to;
+    private String subject;
     private String render;
     private String content;
     private TemplateDto template;

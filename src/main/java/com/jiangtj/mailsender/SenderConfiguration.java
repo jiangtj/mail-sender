@@ -6,8 +6,10 @@ import com.jiangtj.mailsender.hander.TemplateHandler;
 import com.jiangtj.mailsender.render.AsciidocRender;
 import com.jiangtj.mailsender.render.MarkdownRender;
 import com.jiangtj.mailsender.render.Render;
+import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,6 +20,11 @@ import java.util.List;
  */
 @Configuration
 public class SenderConfiguration {
+
+    @Bean
+    public SenderProperties senderProperties(MailProperties mailProperties){
+        return new SenderProperties(mailProperties);
+    }
 
     @Bean
     public MarkdownRender markdownRender(){
@@ -40,8 +47,15 @@ public class SenderConfiguration {
     }
 
     @Bean
-    public SenderHandler senderHandler(RenderHandler renderHandler, TemplateHandler templateHandler) {
-        return new SenderHandler(renderHandler, templateHandler);
+    public SenderHandler senderHandler(SenderProperties properties,
+                                       RenderHandler renderHandler,
+                                       TemplateHandler templateHandler,
+                                       JavaMailSender javaMailSender) {
+        SenderHandler senderHandler = new SenderHandler(properties);
+        senderHandler.setRenderHandler(renderHandler);
+        senderHandler.setTemplateHandler(templateHandler);
+        senderHandler.setMailSender(javaMailSender);
+        return senderHandler;
     }
 
 }

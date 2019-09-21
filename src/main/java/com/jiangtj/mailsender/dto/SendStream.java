@@ -12,4 +12,5 @@ public class SendStream {
     private SendRequestBody requestBody;
     private TemplateDto template;
     private Record record;
+    private String html;
 }

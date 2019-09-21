@@ -2,5 +2,5 @@
 <head>
     <title>Welcome!</title>
 </head>
-<body>${body?html}</body>
+<body>${body?no_esc}</body>
 </html>

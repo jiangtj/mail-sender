@@ -1,8 +1,8 @@
 package com.jiangtj.mailsender;
 
 import com.jiangtj.mailsender.dto.SendRequestBody;
+import com.jiangtj.mailsender.dto.SendStream;
 import com.jiangtj.mailsender.dto.TemplateDto;
-import com.jiangtj.mailsender.model.Record;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +38,8 @@ public class MailSenderApplicationTests {
         Mono<SendRequestBody> body = Mono.just(new TemplateDto())
                 .doOnNext(templateDto -> templateDto.setName("simple"))
                 .map(templateDto -> SendRequestBody.builder()
+                        .to("jiangtjtest@outlook.com")
+                        .subject("Test Email!")
                         .render("md")
                         .content("test *YYYY*, [my blog](https://www.dnocm.com)")
                         .template(templateDto)
@@ -46,7 +48,7 @@ public class MailSenderApplicationTests {
                 .body(body, SendRequestBody.class)
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(Record.class)
+                .expectBody(SendStream.class)
                 .consumeWith(document("send"));
     }
 
