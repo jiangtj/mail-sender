@@ -7,6 +7,7 @@ import com.jiangtj.mailsender.render.AsciidocRender;
 import com.jiangtj.mailsender.render.MarkdownRender;
 import com.jiangtj.mailsender.render.Render;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -22,6 +23,7 @@ import java.util.List;
 public class SenderConfiguration {
 
     @Bean
+    @ConfigurationProperties("sender")
     public SenderProperties senderProperties(MailProperties mailProperties){
         return new SenderProperties(mailProperties);
     }

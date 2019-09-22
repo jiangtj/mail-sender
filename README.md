@@ -29,6 +29,11 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 spring.mail.properties.mail.smtp.starttls.required=true
 ```
 
+生成文档
+```shell script
+mvn test && mvn generate-resources
+```
+
 ## Reason
 
 在Spring文档中也提到了（虽然决定开发前未注意到）

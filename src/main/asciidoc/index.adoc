@@ -1,0 +1,71 @@
+= Mail Sender 使用文档
+Mr.J;
+:toc2: left
+:toc-title: 目录
+:docinfo: shared-head
+:source-highlighter: highlightjs
+
+== 介绍
+
+Mail Sender 是一个轻量级的邮件发送服务。它允许你通过接口调用发送邮件。目前支持以下功能：
+
+1. 文本内容渲染（支持多种渲染请求：markdown 和 asciidoc）
+
+2. 支持自定义模版
+
+== 使用
+
+=== 发送邮件
+
+邮件发送的接口路径为：`/send`，你可以直接通过curl访问
+
+include::{snippets}/send/curl-request.adoc[]
+
+TBD：参数的含义
+
+将得到响应数据为
+
+include::{snippets}/send/http-response.adoc[]
+
+== 服务端配置
+
+=== 安装
+
+1. 下载源码并编译`mvn package`
+
+2. 配置邮件帐号，在jar包的同路径或者config文件夹下添加添加application-mail.properties文件
++
+[source,properties]
+----
+spring.mail.host=smtp.office365.com
+spring.mail.port=587
+spring.mail.username=******
+spring.mail.password=******
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.starttls.required=true
+----
+
+3. 通过java命令运行`java -jar`
+
+=== 配置
+
+==== 自定义模版
+
+修改`sender.template-dir`参数，将模版路径指向你的模版存放路径（文件夹），在请求中的`template.name`参数设置为你自定义的模版名称，即可使用该模版。
+
+`template.params`接受Map，可以定义多个参数。可在模版中使用。其中`body`与`bodyRaw`会被参数，分别表示渲染后的`content`与原生的`content`。
+
+== 计划
+
+当前处于预览阶段，仍在持续改进中，未来将支持以下功能：
+
+1. 提供多种内置模版（文章、验证码等等）
+
+2. 数据持久化
+
+3. 文档i18n支持
+
+4. docker容器支持
+
+5. 独立UI模块（考虑单独一个工程负责UI操作🤔）

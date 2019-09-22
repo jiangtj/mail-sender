@@ -109,17 +109,22 @@
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
                 <version>1.5.8</version>
+                <configuration>
+                    <sourceDocumentName>index.adoc</sourceDocumentName>
+                    <doctype>book</doctype>
+                    <backend>html5</backend>
+                    <attributes>
+                        <allow-uri-read>true</allow-uri-read>
+                        <attribute-missing>warn</attribute-missing>
+                    </attributes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>generate-docs</id>
-                        <phase>prepare-package</phase>
+                        <phase>generate-resources</phase>
                         <goals>
                             <goal>process-asciidoc</goal>
                         </goals>
-                        <configuration>
-                            <backend>html</backend>
-                            <doctype>book</doctype>
-                        </configuration>
                     </execution>
                 </executions>
                 <dependencies>

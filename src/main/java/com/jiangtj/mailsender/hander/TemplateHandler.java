@@ -2,6 +2,7 @@ package com.jiangtj.mailsender.hander;
 
 import com.jiangtj.mailsender.SenderException;
 import com.jiangtj.mailsender.SenderProperties;
+import com.jiangtj.mailsender.dto.Result;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -43,7 +44,7 @@ public class TemplateHandler {
             temp.process(params, writer);
         } catch (IOException | TemplateException e) {
             log.error("TemplateException", e);
-            throw new SenderException("System Error!");
+            throw new SenderException(Result.serverError("System Error!"));
         }
         return writer.toString();
     }

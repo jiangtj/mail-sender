@@ -2,6 +2,7 @@ package com.jiangtj.mailsender.hander;
 
 import com.jiangtj.mailsender.SenderException;
 import com.jiangtj.mailsender.SenderProperties;
+import com.jiangtj.mailsender.dto.Result;
 import com.jiangtj.mailsender.dto.SendRequestBody;
 import com.jiangtj.mailsender.dto.SendStream;
 import com.jiangtj.mailsender.dto.TemplateDto;
@@ -42,13 +43,14 @@ public class SenderHandler {
      * Send mail
      */
     public Mono<ServerResponse> send(ServerRequest request) {
-        Mono<SendStream> result = request.bodyToMono(SendRequestBody.class)
+        return request.bodyToMono(SendRequestBody.class)
                 .map(this::handleParams)
                 .doOnNext(this::renderContent)
                 .doOnNext(this::handleTemplate)
-                .doOnNext(this::sendMail);
-        //.thenReturn("success!");
-        return ServerResponse.ok().body(result, SendStream.class);
+                .doOnNext(this::sendMail)
+                //.doOnNext(this::handleResult);
+                .thenReturn(Result.ok())
+                .transform(Result::transformToResponse);
     }
 
     /**
@@ -109,7 +111,7 @@ public class SenderHandler {
             helper.setFrom(properties.getMail().getUsername());
         } catch (MessagingException e) {
             log.error("Mail MessagingException", e);
-            throw new SenderException(e.getMessage());
+            throw new SenderException(Result.serverError("Mail MessagingException!"));
         }
         mailSender.send(message);
     }
