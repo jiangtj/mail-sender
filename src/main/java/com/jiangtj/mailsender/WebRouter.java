@@ -1,10 +1,10 @@
 package com.jiangtj.mailsender;
 
+import com.jiangtj.mailsender.dto.Result;
 import com.jiangtj.mailsender.hander.SenderHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -23,10 +23,15 @@ public class WebRouter {
     public RouterFunction<ServerResponse> mainRouter() {
         return RouterFunctions.route()
                 .GET("/", request -> {
-                    return ServerResponse.ok().body(BodyInserters.fromObject("hi hi!"));
+                    return ServerResponse.ok().syncBody("Hello world!");
                 })
                 .POST("/send", senderHandler::send)
-                .build();
+                .build()
+                .filter((serverRequest, handlerFunction) -> {
+                    return handlerFunction.handle(serverRequest).onErrorResume(IllegalArgumentException.class, e -> {
+                        return ServerResponse.badRequest().syncBody(Result.badRequest(e.getMessage()));
+                    });
+                });
     }
 
 }

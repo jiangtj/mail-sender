@@ -1,22 +1,26 @@
 package com.jiangtj.mailsender;
 
+import com.jiangtj.mailsender.dto.Result;
 import com.jiangtj.mailsender.dto.SendRequestBody;
-import com.jiangtj.mailsender.dto.SendStream;
 import com.jiangtj.mailsender.dto.TemplateDto;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.util.HashMap;
 
+import static org.junit.Assert.assertEquals;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
 
+@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureWebTestClient
@@ -31,8 +35,7 @@ public class MailSenderApplicationTests {
         webTestClient.get().uri("/")
                 .exchange()
                 .expectBody(String.class)
-                .isEqualTo("hi hi!")
-                .consumeWith(document("run"));
+                .isEqualTo("Hello world!");
     }
 
     @Test
@@ -51,7 +54,8 @@ public class MailSenderApplicationTests {
                 .syncBody(body)
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(SendStream.class)
+                .expectBody(Result.class)
+                .value(result -> assertEquals(result.getStatus(), HttpStatus.OK))
                 .consumeWith(document("send",
                         requestFields(
                                 fieldWithPath("to").description("Send mail address."),
@@ -63,9 +67,28 @@ public class MailSenderApplicationTests {
                         ),
                         responseFields(
                                 fieldWithPath("status").description("Http status."),
-                                fieldWithPath("message").type("String").optional().description("Some info for fail reason or others.")
+                                fieldWithPath("message").type("String").optional().description("Some info for fail reason or others."),
+                                fieldWithPath("time").type("String").description("Response time.")
                         )
                 ));
+    }
+
+    @Test
+    public void sendFail() {
+        SendRequestBody body =  SendRequestBody.builder()
+                .to("jiangtjtest@outlook.com")
+                .render("md")
+                .content("test *YYYY*, [my blog](https://www.dnocm.com)")
+                .build();
+        webTestClient.post().uri("/send")
+                .syncBody(body)
+                .exchange()
+                .expectStatus().is4xxClientError()
+                .expectBody(Result.class)
+                .value(result -> {
+                    assertEquals(result.getStatus(), HttpStatus.BAD_REQUEST);
+                    log.error(result.toString());
+                });
     }
 
 }

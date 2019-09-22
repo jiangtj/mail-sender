@@ -1,24 +1,32 @@
 package com.jiangtj.mailsender.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jiangtj.mailsender.SenderException;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDateTime;
 
 /**
  * Created by jiang (jiang.taojie@foxmail.com)
  * 2019/9/22 14:23 End.
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor(staticName = "of")
 public class Result {
 
     private HttpStatus status;
     private String message;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime time = LocalDateTime.now();
+
+    public static Result of(HttpStatus status, String message) {
+        Result result = new Result();
+        result.setStatus(status);
+        result.setMessage(message);
+        return result;
+    }
 
     public static Result ok() {
         return Result.of(HttpStatus.OK, null);
