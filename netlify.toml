@@ -1,0 +1,4 @@
+[[redirects]]
+  from = "https://jiangtj-mail-sender.netlify.com/*"
+  to = "https://mail-sender.jiangtj.com/:splat"
+  force = true
