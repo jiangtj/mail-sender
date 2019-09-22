@@ -6,24 +6,35 @@ Mr.J;
 :source-highlighter: highlightjs
 
 == 介绍
+image:https://img.shields.io/github/v/release/jiangtj/mail-sender["GitHub release (latest by date)", link= "https://github.com/jiangtj/mail-sender"]
+image:https://img.shields.io/github/stars/jiangtj/mail-sender?style=flat["GitHub stars", link= "https://github.com/jiangtj/mail-sender"]
+image:https://www.travis-ci.org/jiangtj/mail-sender.svg?branch=master["Build Status", link="https://www.travis-ci.org/jiangtj/mail-sender"]
+image:https://api.codacy.com/project/badge/Grade/0ade707e15e4443fa5ec79eaa0e0145d["Codacy code quality", link="https://www.codacy.com/manual/116749895/mail-sender?utm_source=github.com&utm_medium=referral&utm_content=jiangtj/mail-sender&utm_campaign=Badge_Grade"]
+image:https://api.codacy.com/project/badge/Coverage/0ade707e15e4443fa5ec79eaa0e0145d["Codacy code quality", link="https://www.codacy.com/manual/116749895/mail-sender?utm_source=github.com&utm_medium=referral&utm_content=jiangtj/mail-sender&utm_campaign=Badge_Coverage"]
 
 Mail Sender 是一个轻量级的邮件发送服务。它允许你通过接口调用发送邮件。目前支持以下功能：
 
-1. 文本内容渲染（支持多种渲染请求：markdown 和 asciidoc）
+1. 文本内容渲染（支持多种渲染引擎：markdown 和 asciidoc）
 
 2. 支持自定义模版
 
 == 使用
 
+Mail Sender 属于一个微服务，只负责邮件的发送及管理，与客户端或者其它服务之间通过接口进行交互
+
 === 发送邮件
 
-邮件发送的接口路径为：`/send`，你可以直接通过curl访问
+路径：*POST* `/send`
+
+Request请求的参数：
+
+include::{snippets}/send/request-fields.adoc[]
 
 include::{snippets}/send/curl-request.adoc[]
 
-TBD：参数的含义
+Response响应数据：
 
-将得到响应数据为
+include::{snippets}/send/response-fields.adoc[]
 
 include::{snippets}/send/http-response.adoc[]
 
@@ -54,7 +65,7 @@ spring.mail.properties.mail.smtp.starttls.required=true
 
 修改`sender.template-dir`参数，将模版路径指向你的模版存放路径（文件夹），在请求中的`template.name`参数设置为你自定义的模版名称，即可使用该模版。
 
-`template.params`接受Map，可以定义多个参数。可在模版中使用。其中`body`与`bodyRaw`会被参数，分别表示渲染后的`content`与原生的`content`。
+`template.params` 接受Map，可以定义多个参数。可在模版中使用。其中 `body` 与 `bodyRaw` 会在渲染content过程中添加至params参数，分别表示渲染后与渲染前的 `content`。
 
 == 计划
 

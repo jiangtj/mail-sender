@@ -9,6 +9,7 @@ import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ResourceUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -22,6 +23,7 @@ import java.util.Map;
 public class TemplateHandler {
 
     private Configuration cfg;
+    private static String defaultTemplate="simple.ftlh";
 
     public TemplateHandler(SenderProperties properties) throws IOException {
         Configuration cfg = new Configuration(Configuration.VERSION_2_3_29);
@@ -36,6 +38,9 @@ public class TemplateHandler {
 
     public String handle(String name, Map<String,Object> params) {
         StringWriter writer = new StringWriter();
+        if (StringUtils.isEmpty(name)) {
+            name = defaultTemplate;
+        }
         if (!name.contains(".")) {
             name = name + ".ftlh";
         }
