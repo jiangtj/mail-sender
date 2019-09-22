@@ -5,6 +5,8 @@
 
 轻量的邮件发送服务（正在积极开发中）
 
+文档地址：https://mail-sender.jiangtj.com/
+
 ## Design
 
 ![image](https://user-images.githubusercontent.com/15902347/64757270-2b374880-d564-11e9-9a36-d319f7aad1b1.png)
