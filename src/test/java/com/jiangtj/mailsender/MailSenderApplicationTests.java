@@ -66,7 +66,7 @@ class MailSenderApplicationTests {
     }
 
     @Test
-    void sendFail() {
+    void sendFail1() {
         SendRequestBody body =  SendRequestBody.builder()
                 .to("jiangtjtest@outlook.com")
                 .render("md")
@@ -79,6 +79,25 @@ class MailSenderApplicationTests {
                 .expectBody(Result.class)
                 .value(result -> {
                     assertEquals(result.getStatus(), HttpStatus.BAD_REQUEST);
+                    log.error(result.toString());
+                });
+    }
+
+    @Test
+    void sendFail2() {
+        SendRequestBody body =  SendRequestBody.builder()
+                .to("jiangtjtest@outlook.com")
+                .subject("failure mail")
+                .render("md")
+                .content("test *YYYY*, [my blog](https://www.dnocm.com)")
+                .build();
+        webTestClient.post().uri("/send")
+                .syncBody(body)
+                .exchange()
+                .expectStatus().is5xxServerError()
+                .expectBody(Result.class)
+                .value(result -> {
+                    assertEquals(result.getStatus(), HttpStatus.INTERNAL_SERVER_ERROR);
                     log.error(result.toString());
                 });
     }
