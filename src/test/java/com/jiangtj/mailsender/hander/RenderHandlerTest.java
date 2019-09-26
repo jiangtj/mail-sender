@@ -4,11 +4,13 @@ import com.jiangtj.mailsender.render.AsciidocRender;
 import com.jiangtj.mailsender.render.MarkdownRender;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.Arrays;
 import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 /**
  * Created by jiang (jiang.taojie@foxmail.com)
@@ -27,27 +29,23 @@ class RenderHandlerTest {
         assertEquals(html, "test *YYYY*, [my blog](https://www.dnocm.com)");
     }
 
-    @Test
-    void testMarkdown() {
+    @ParameterizedTest
+    @ValueSource(strings = {"md", "markdown"})
+    void testMarkdown(String renderName) {
         renderHandler = new RenderHandler(Collections.singletonList(new MarkdownRender()));
-        Arrays.asList("md","markdown").forEach(name -> {
-            String html = renderHandler.render("md",
-                    "test *YYYY*, [my blog](https://www.dnocm.com)");
-            assertEquals(html, "<p>test <em>YYYY</em>, <a href=\"https://www.dnocm.com\">my blog</a></p>\n");
-            log.info("Render:{} tested ok !", name);
-        });
+        String html = renderHandler.render(renderName,
+                "test *YYYY*, [my blog](https://www.dnocm.com)");
+        assertEquals(html, "<p>test <em>YYYY</em>, <a href=\"https://www.dnocm.com\">my blog</a></p>\n");
+        log.info("Render:{} tested ok !", renderName);
     }
 
-    @Test
-    void testAsciidoc() {
+    @ParameterizedTest
+    @ValueSource(strings = {"adoc", "asciidoc"})
+    void testAsciidoc(String renderName) {
         renderHandler = new RenderHandler(Collections.singletonList(new AsciidocRender()));
-        Arrays.asList("adoc", "asciidoc").forEach(name -> {
-            String html = renderHandler.render("adoc",
-                    "test *YYYY*, https://www.dnocm.com[my blog]");
-            assertEquals(html, "<div class=\"paragraph\">\n" +
-                    "<p>test <strong>YYYY</strong>, <a href=\"https://www.dnocm.com\">my blog</a></p>\n" +
-                    "</div>");
-            log.info("Render:{} tested ok !", name);
-        });
+        String html = renderHandler.render(renderName,
+                "test *YYYY*, https://www.dnocm.com[my blog]");
+        assertEquals(html, "<div class=\"paragraph\">\n<p>test <strong>YYYY</strong>, <a href=\"https://www.dnocm.com\">my blog</a></p>\n</div>");
+        log.info("Render:{} tested ok !", renderName);
     }
 }
