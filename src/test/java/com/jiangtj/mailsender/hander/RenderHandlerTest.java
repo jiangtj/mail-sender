@@ -1,10 +1,9 @@
-package com.jiangtj.mailsender;
+package com.jiangtj.mailsender.hander;
 
-import com.jiangtj.mailsender.hander.RenderHandler;
 import com.jiangtj.mailsender.render.AsciidocRender;
 import com.jiangtj.mailsender.render.MarkdownRender;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,12 +15,12 @@ import static org.junit.Assert.assertEquals;
  * 2019/9/18 22:52 End.
  */
 @Slf4j
-public class RenderHandlerTest {
+class RenderHandlerTest {
 
     private RenderHandler renderHandler;
 
     @Test
-    public void testErrorRender() {
+    void testErrorRender() {
         renderHandler = new RenderHandler(Collections.emptyList());
         String html = renderHandler.render("no-render",
                 "test *YYYY*, [my blog](https://www.dnocm.com)");
@@ -29,7 +28,7 @@ public class RenderHandlerTest {
     }
 
     @Test
-    public void testMarkdown() {
+    void testMarkdown() {
         renderHandler = new RenderHandler(Collections.singletonList(new MarkdownRender()));
         Arrays.asList("md","markdown").forEach(name -> {
             String html = renderHandler.render("md",
@@ -40,7 +39,7 @@ public class RenderHandlerTest {
     }
 
     @Test
-    public void testAsciidoc() {
+    void testAsciidoc() {
         renderHandler = new RenderHandler(Collections.singletonList(new AsciidocRender()));
         Arrays.asList("adoc", "asciidoc").forEach(name -> {
             String html = renderHandler.render("adoc",

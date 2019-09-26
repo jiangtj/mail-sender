@@ -1,0 +1,22 @@
+package com.jiangtj.mailsender;
+
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * Created by MrTT (jiang.taojie@foxmail.com)
+ * 2019/9/26.
+ */
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@SpringBootTest
+@AutoConfigureWebTestClient
+@AutoConfigureRestDocs
+public @interface ApplicationTest {
+}

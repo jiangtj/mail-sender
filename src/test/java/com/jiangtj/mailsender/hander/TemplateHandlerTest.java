@@ -1,9 +1,9 @@
-package com.jiangtj.mailsender;
+package com.jiangtj.mailsender.hander;
 
-import com.jiangtj.mailsender.hander.TemplateHandler;
+import com.jiangtj.mailsender.SenderProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,18 +13,18 @@ import java.util.Map;
  * 2019/9/18.
  */
 @Slf4j
-public class TemplateHandlerTest {
+class TemplateHandlerTest {
 
     private TemplateHandler templateHandler;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         SenderProperties properties = new SenderProperties(null);
         templateHandler = new TemplateHandler(properties);
     }
 
     @Test
-    public void handle() {
+    void handle() {
         Map<String, Object> params = new HashMap<>();
         params.put("user", "Jack");
         String handledHtml = templateHandler.handle("test", params);
@@ -32,7 +32,7 @@ public class TemplateHandlerTest {
     }
 
     @Test
-    public void handleHtml() {
+    void handleHtml() {
         Map<String, Object> params = new HashMap<>();
         params.put("body", "<p>test <em>YYYY</em>, <a href=\"https://www.dnocm.com\">my blog</a></p>");
         String handledHtml = templateHandler.handle("simple", params);

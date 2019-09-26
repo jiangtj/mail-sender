@@ -4,14 +4,9 @@ import com.jiangtj.mailsender.dto.Result;
 import com.jiangtj.mailsender.dto.SendRequestBody;
 import com.jiangtj.mailsender.dto.TemplateDto;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.util.HashMap;
@@ -21,17 +16,14 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
 
 @Slf4j
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureWebTestClient
-@AutoConfigureRestDocs
-public class MailSenderApplicationTests {
+@ApplicationTest
+class MailSenderApplicationTests {
 
     @Autowired
     private WebTestClient webTestClient;
 
     @Test
-    public void contextLoads() {
+    void contextLoads() {
         webTestClient.get().uri("/")
                 .exchange()
                 .expectBody(String.class)
@@ -39,7 +31,7 @@ public class MailSenderApplicationTests {
     }
 
     @Test
-    public void send() {
+    void send() {
         TemplateDto template = new TemplateDto();
         template.setName("simple");
         template.setParams(new HashMap<>());
@@ -74,7 +66,7 @@ public class MailSenderApplicationTests {
     }
 
     @Test
-    public void sendFail() {
+    void sendFail() {
         SendRequestBody body =  SendRequestBody.builder()
                 .to("jiangtjtest@outlook.com")
                 .render("md")
