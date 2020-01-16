@@ -6,6 +6,7 @@ import com.jiangtj.mailsender.hander.TemplateHandler;
 import com.jiangtj.mailsender.render.AsciidocRender;
 import com.jiangtj.mailsender.render.MarkdownRender;
 import com.jiangtj.mailsender.render.Render;
+import com.jiangtj.mailsender.repository.RecordRepository;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -52,11 +53,13 @@ public class SenderConfiguration {
     public SenderHandler senderHandler(SenderProperties properties,
                                        RenderHandler renderHandler,
                                        TemplateHandler templateHandler,
-                                       JavaMailSender javaMailSender) {
+                                       JavaMailSender javaMailSender,
+                                       RecordRepository recordRepository) {
         SenderHandler senderHandler = new SenderHandler(properties);
         senderHandler.setRenderHandler(renderHandler);
         senderHandler.setTemplateHandler(templateHandler);
         senderHandler.setMailSender(javaMailSender);
+        senderHandler.setRecordRepository(recordRepository);
         return senderHandler;
     }
 

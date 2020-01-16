@@ -6,6 +6,8 @@ import com.jiangtj.mailsender.dto.Result;
 import com.jiangtj.mailsender.dto.SendRequestBody;
 import com.jiangtj.mailsender.dto.SendStream;
 import com.jiangtj.mailsender.dto.TemplateDto;
+import com.jiangtj.mailsender.model.Record;
+import com.jiangtj.mailsender.repository.RecordRepository;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -34,6 +36,8 @@ public class SenderHandler {
     private TemplateHandler templateHandler;
     @Setter
     private JavaMailSender mailSender;
+    @Setter
+    private RecordRepository recordRepository;
 
     public SenderHandler(SenderProperties properties) {
         this.properties = properties;
@@ -48,7 +52,7 @@ public class SenderHandler {
                 .doOnNext(this::renderContent)
                 .doOnNext(this::handleTemplate)
                 .doOnNext(this::sendMail)
-                //.doOnNext(this::handleResult);
+                .doOnNext(this::saveRecord)
                 .thenReturn(Result.ok())
                 .transform(Result::transformToResponse);
     }
@@ -114,6 +118,20 @@ public class SenderHandler {
             throw new SenderException(Result.serverError("Mail MessagingException!"));
         }
         mailSender.send(message);
+    }
+
+    /**
+     * Save record for query or other func.
+     */
+    private void saveRecord(SendStream stream) {
+        SendRequestBody requestBody = stream.getRequestBody();
+        Record record = Record.builder()
+                .sender(properties.getMail().getUsername())
+                .addressee(requestBody.getTo())
+                .title(requestBody.getSubject())
+                .content(requestBody.getContent())
+                .build();
+        recordRepository.save(record);
     }
 
 }

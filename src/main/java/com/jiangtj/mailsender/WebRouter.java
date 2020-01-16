@@ -2,6 +2,7 @@ package com.jiangtj.mailsender;
 
 import com.jiangtj.mailsender.dto.Result;
 import com.jiangtj.mailsender.hander.SenderHandler;
+import com.jiangtj.mailsender.repository.RecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,8 @@ public class WebRouter {
 
     @Autowired
     private SenderHandler senderHandler;
+    @Autowired
+    private RecordRepository recordRepository;
 
     @Bean
     public RouterFunction<ServerResponse> mainRouter() {
@@ -26,6 +29,21 @@ public class WebRouter {
                     return ServerResponse.ok().syncBody("Hello world!");
                 })
                 .POST("/send", senderHandler::send)
+                .build()
+                .filter((serverRequest, handlerFunction) -> {
+                    return handlerFunction.handle(serverRequest).onErrorResume(IllegalArgumentException.class, e -> {
+                        return ServerResponse.badRequest().syncBody(Result.badRequest(e.getMessage()));
+                    });
+                });
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> recordRouter() {
+        return RouterFunctions.route()
+                .path("/record", builder ->  builder
+                        .GET("/all", request -> {
+                            return ServerResponse.ok().syncBody(recordRepository.findAll());
+                        }))
                 .build()
                 .filter((serverRequest, handlerFunction) -> {
                     return handlerFunction.handle(serverRequest).onErrorResume(IllegalArgumentException.class, e -> {
