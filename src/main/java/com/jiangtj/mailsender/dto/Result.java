@@ -47,11 +47,11 @@ public class Result {
     public static Mono<ServerResponse> transformToResponse(Mono<Result> result) {
         return result
                 .flatMap(data -> {
-                    return ServerResponse.status(data.getStatus()).syncBody(data);
+                    return ServerResponse.status(data.getStatus()).bodyValue(data);
                 })
                 .onErrorResume(SenderException.class, exception -> {
                     Result exceptionResult = exception.getResult();
-                    return ServerResponse.status(exceptionResult.getStatus()).syncBody(exceptionResult);
+                    return ServerResponse.status(exceptionResult.getStatus()).bodyValue(exceptionResult);
                 });
     }
 

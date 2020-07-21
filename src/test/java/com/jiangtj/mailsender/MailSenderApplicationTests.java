@@ -43,7 +43,7 @@ class MailSenderApplicationTests {
                 .template(template)
                 .build();
         webTestClient.post().uri("/send")
-                .syncBody(body)
+                .bodyValue(body)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Result.class)
@@ -73,7 +73,7 @@ class MailSenderApplicationTests {
                 .content("test *YYYY*, [my blog](https://www.dnocm.com)")
                 .build();
         webTestClient.post().uri("/send")
-                .syncBody(body)
+                .bodyValue(body)
                 .exchange()
                 .expectStatus().is4xxClientError()
                 .expectBody(Result.class)
@@ -92,7 +92,7 @@ class MailSenderApplicationTests {
                 .content("test *YYYY*, [my blog](https://www.dnocm.com)")
                 .build();
         webTestClient.post().uri("/send")
-                .syncBody(body)
+                .bodyValue(body)
                 .exchange()
                 .expectStatus().is5xxServerError()
                 .expectBody(Result.class)

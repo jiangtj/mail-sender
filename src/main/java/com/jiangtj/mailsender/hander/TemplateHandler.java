@@ -23,7 +23,7 @@ import java.util.Map;
 public class TemplateHandler {
 
     private Configuration cfg;
-    private static String defaultTemplate="simple.ftlh";
+    private final static String defaultTemplate="simple.ftlh";
 
     public TemplateHandler(SenderProperties properties) throws IOException {
         Configuration cfg = new Configuration(Configuration.VERSION_2_3_29);

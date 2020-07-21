@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @SpringBootTest
 @AutoConfigureWebTestClient
-@AutoConfigureRestDocs
+@AutoConfigureRestDocs(uriPort = 9898)
 @ExtendWith({MailSenderExtension.class})
 public @interface ApplicationTest {
 }

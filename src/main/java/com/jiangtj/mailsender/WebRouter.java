@@ -23,13 +23,13 @@ public class WebRouter {
     public RouterFunction<ServerResponse> mainRouter() {
         return RouterFunctions.route()
                 .GET("/", request -> {
-                    return ServerResponse.ok().syncBody("Hello world!");
+                    return ServerResponse.ok().bodyValue("Hello world!");
                 })
                 .POST("/send", senderHandler::send)
                 .build()
                 .filter((serverRequest, handlerFunction) -> {
                     return handlerFunction.handle(serverRequest).onErrorResume(IllegalArgumentException.class, e -> {
-                        return ServerResponse.badRequest().syncBody(Result.badRequest(e.getMessage()));
+                        return ServerResponse.badRequest().bodyValue(Result.badRequest(e.getMessage()));
                     });
                 });
     }
