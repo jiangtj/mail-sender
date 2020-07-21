@@ -17,7 +17,7 @@
     <properties>
         <java.version>1.8</java.version>
         <asciidoctorj.version>2.4.0</asciidoctorj.version>
-        <commonmark.version>0.14.0</commonmark.version>
+        <commonmark.version>0.15.2</commonmark.version>
     </properties>
 
     <dependencies>
