@@ -3,11 +3,12 @@ package com.jiangtj.mailsender;
 import com.jiangtj.mailsender.hander.RenderHandler;
 import com.jiangtj.mailsender.hander.SenderHandler;
 import com.jiangtj.mailsender.hander.TemplateHandler;
+import com.jiangtj.mailsender.properties.SenderProperties;
+import com.jiangtj.mailsender.properties.TemplateProperties;
 import com.jiangtj.mailsender.render.AsciidocRender;
 import com.jiangtj.mailsender.render.MarkdownRender;
 import com.jiangtj.mailsender.render.Render;
-import org.springframework.boot.autoconfigure.mail.MailProperties;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -20,13 +21,8 @@ import java.util.List;
  * 2019/9/12 20:33 End.
  */
 @Configuration
+@EnableConfigurationProperties({ SenderProperties.class, TemplateProperties.class })
 public class SenderConfiguration {
-
-    @Bean
-    @ConfigurationProperties("sender")
-    public SenderProperties senderProperties(MailProperties mailProperties){
-        return new SenderProperties(mailProperties);
-    }
 
     @Bean
     public MarkdownRender markdownRender(){
@@ -45,7 +41,7 @@ public class SenderConfiguration {
 
     @Bean
     public TemplateHandler templateHandler(SenderProperties properties) throws IOException {
-        return new TemplateHandler(properties);
+        return new TemplateHandler(properties.getTemplate());
     }
 
     @Bean

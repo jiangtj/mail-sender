@@ -1,16 +1,15 @@
 package com.jiangtj.mailsender.hander;
 
 import com.jiangtj.mailsender.SenderException;
-import com.jiangtj.mailsender.SenderProperties;
+import com.jiangtj.mailsender.dto.DataExchange;
 import com.jiangtj.mailsender.dto.Result;
 import com.jiangtj.mailsender.dto.SendRequestBody;
-import com.jiangtj.mailsender.dto.SendStream;
 import com.jiangtj.mailsender.dto.TemplateDto;
+import com.jiangtj.mailsender.properties.SenderProperties;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
@@ -56,7 +55,7 @@ public class SenderHandler {
     /**
      * Handle params for set default value and transform to SendStream
      */
-    private SendStream handleParams(SendRequestBody body) {
+    private DataExchange handleParams(SendRequestBody body) {
         if (body.getTemplate() == null) {
             body.setTemplate(new TemplateDto());
         }
@@ -64,10 +63,9 @@ public class SenderHandler {
         if (template.getParams() == null) {
             template.setParams(new HashMap<>());
         }
-        SendStream stream = new SendStream();
-        stream.setRequestBody(body);
-        stream.setTemplate(template);
-        return stream;
+        DataExchange exchange = new DataExchange();
+        exchange.setRequestBody(body);
+        return exchange;
     }
 
     /**
@@ -75,39 +73,38 @@ public class SenderHandler {
      * It will set value to `body` and `bodyRaw` in template params.
      * So please don't use them.
      */
-    private void renderContent(SendStream stream) {
-        SendRequestBody body = stream.getRequestBody();
+    private void renderContent(DataExchange exchange) {
+        SendRequestBody body = exchange.getRequestBody();
         String render = body.getRender();
         String content = body.getContent();
         String renderHtml = renderHandler.render(render, content);
-        if (StringUtils.isEmpty(renderHtml)) {
-            return;
-        }
-        Map<String, Object> params = stream.getTemplate().getParams();
-        params.put("bodyRaw", content);
-        params.put("body", renderHtml);
+        exchange.setRenderedContent(renderHtml);
     }
 
     /**
      * Handle template and params, make them to html.
      */
-    private void handleTemplate(SendStream stream) {
-        TemplateDto template = stream.getTemplate();
-        String html = templateHandler.handle(template.getName(), template.getParams());
-        stream.setHtml(html);
+    private void handleTemplate(DataExchange exchange) {
+        SendRequestBody body = exchange.getRequestBody();
+        TemplateDto template = body.getTemplate();
+        Map<String, Object> params = template.getParams();
+        params.put("bodyRaw", body.getContent());
+        params.put("body", exchange.getRenderedContent());
+        String html = templateHandler.handle(template.getName(), params);
+        exchange.setHtml(html);
     }
 
     /**
      * Send mail to people with rendered html.
      */
-    private void sendMail(SendStream stream) {
-        SendRequestBody requestBody = stream.getRequestBody();
+    private void sendMail(DataExchange exchange) {
+        SendRequestBody requestBody = exchange.getRequestBody();
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         try {
             helper.setTo(requestBody.getTo());
             helper.setSubject(requestBody.getSubject());
-            helper.setText(stream.getHtml(), true);
+            helper.setText(exchange.getHtml(), true);
             helper.setFrom(properties.getMail().getUsername());
         } catch (MessagingException e) {
             log.error("Mail MessagingException", e);

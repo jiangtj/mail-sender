@@ -1,12 +1,9 @@
 package com.jiangtj.mailsender.hander;
 
 import com.jiangtj.mailsender.SenderException;
-import com.jiangtj.mailsender.SenderProperties;
 import com.jiangtj.mailsender.dto.Result;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateExceptionHandler;
+import com.jiangtj.mailsender.properties.TemplateProperties;
+import freemarker.template.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
@@ -22,24 +19,24 @@ import java.util.Map;
 @Slf4j
 public class TemplateHandler {
 
-    private Configuration cfg;
-    private final static String defaultTemplate="simple.ftlh";
+    private final Configuration cfg;
 
-    public TemplateHandler(SenderProperties properties) throws IOException {
-        Configuration cfg = new Configuration(Configuration.VERSION_2_3_29);
-        cfg.setDirectoryForTemplateLoading(ResourceUtils.getFile(properties.getTemplateDir()));
-        cfg.setDefaultEncoding("UTF-8");
+    public TemplateHandler(TemplateProperties properties) throws IOException {
+        String version = properties.getVersion();
+        Configuration cfg = new Configuration(StringUtils.isEmpty(version) ? Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS : new Version(version));
+        cfg.setDirectoryForTemplateLoading(ResourceUtils.getFile(properties.getDir()));
+        cfg.setDefaultEncoding(properties.getEncode());
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-        cfg.setLogTemplateExceptions(false);
-        cfg.setWrapUncheckedExceptions(true);
-        cfg.setFallbackOnNullLoopVariable(false);
+        cfg.setLogTemplateExceptions(properties.isLogTemplateExceptions());
+        cfg.setWrapUncheckedExceptions(properties.isWrapUncheckedExceptions());
+        cfg.setFallbackOnNullLoopVariable(properties.isFallbackOnNullLoopVariable());
         this.cfg = cfg;
     }
 
     public String handle(String name, Map<String,Object> params) {
         StringWriter writer = new StringWriter();
         if (StringUtils.isEmpty(name)) {
-            name = defaultTemplate;
+            return (String) params.get("body");
         }
         if (!name.contains(".")) {
             name = name + ".ftlh";

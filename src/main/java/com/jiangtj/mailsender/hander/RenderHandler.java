@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class RenderHandler {
 
     @Getter
-    private Map<String, Render> renders;
+    private final Map<String, Render> renders;
 
     public RenderHandler(List<Render> renders){
         this.renders = renders.stream()
