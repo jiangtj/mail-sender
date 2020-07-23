@@ -1,8 +1,6 @@
 package com.jiangtj.mailsender.render;
 
-import org.commonmark.node.Node;
-import org.commonmark.parser.Parser;
-import org.commonmark.renderer.html.HtmlRenderer;
+import com.jiangtj.common.commonmarkspringstarter.Commonmarks;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,12 +11,15 @@ import java.util.List;
  */
 public class MarkdownRender implements Render {
 
+    private final Commonmarks commonmarks;
+
+    public MarkdownRender(Commonmarks commonmarks) {
+        this.commonmarks = commonmarks;
+    }
+
     @Override
     public String render(String content) {
-        Parser parser = Parser.builder().build();
-        Node document = parser.parse(content);
-        HtmlRenderer renderer = HtmlRenderer.builder().build();
-        return renderer.render(document);
+        return commonmarks.render(content);
     }
 
     @Override

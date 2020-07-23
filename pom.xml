@@ -18,7 +18,27 @@
         <java.version>1.8</java.version>
         <asciidoctorj.version>2.4.0</asciidoctorj.version>
         <commonmark.version>0.15.2</commonmark.version>
+        <commonmark-spring-starter.version>0.0.9</commonmark-spring-starter.version>
     </properties>
+
+    <profiles>
+        <profile>
+            <repositories>
+                <repository>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                    <id>bintray-jiangtj-maven</id>
+                    <name>bintray</name>
+                    <url>https://dl.bintray.com/jiangtj/maven</url>
+                </repository>
+            </repositories>
+            <id>bintray</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
 
     <dependencies>
 
@@ -29,9 +49,9 @@
             <version>${asciidoctorj.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.atlassian.commonmark</groupId>
-            <artifactId>commonmark</artifactId>
-            <version>${commonmark.version}</version>
+            <groupId>com.jiangtj.common</groupId>
+            <artifactId>commonmark-spring-starter</artifactId>
+            <version>${commonmark-spring-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>org.freemarker</groupId>

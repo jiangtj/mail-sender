@@ -1,8 +1,11 @@
 package com.jiangtj.mailsender.hander;
 
+import com.jiangtj.common.commonmarkspringstarter.Commonmarks;
 import com.jiangtj.mailsender.render.AsciidocRender;
 import com.jiangtj.mailsender.render.MarkdownRender;
 import lombok.extern.slf4j.Slf4j;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -32,7 +35,10 @@ class RenderHandlerTest {
     @ParameterizedTest
     @ValueSource(strings = {"md", "markdown"})
     void testMarkdown(String renderName) {
-        renderHandler = new RenderHandler(Collections.singletonList(new MarkdownRender()));
+        renderHandler = new RenderHandler(Collections.singletonList(new MarkdownRender(new Commonmarks(
+                Parser.builder().build(),
+                HtmlRenderer.builder().build()
+        ))));
         String html = renderHandler.render(renderName,
                 "test *YYYY*, [my blog](https://www.dnocm.com)");
         assertEquals(html, "<p>test <em>YYYY</em>, <a href=\"https://www.dnocm.com\">my blog</a></p>\n");

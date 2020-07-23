@@ -1,5 +1,7 @@
 package com.jiangtj.mailsender;
 
+import com.jiangtj.common.commonmarkspringstarter.Commonmarks;
+import com.jiangtj.common.commonmarkspringstarter.EnableCommonmark;
 import com.jiangtj.mailsender.hander.RenderHandler;
 import com.jiangtj.mailsender.hander.SenderHandler;
 import com.jiangtj.mailsender.hander.TemplateHandler;
@@ -21,12 +23,13 @@ import java.util.List;
  * 2019/9/12 20:33 End.
  */
 @Configuration
+@EnableCommonmark
 @EnableConfigurationProperties({ SenderProperties.class, TemplateProperties.class })
 public class SenderConfiguration {
 
     @Bean
-    public MarkdownRender markdownRender(){
-        return new MarkdownRender();
+    public MarkdownRender markdownRender(Commonmarks commonmarks){
+        return new MarkdownRender(commonmarks);
     }
 
     @Bean
