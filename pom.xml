@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <asciidoctorj.version>2.4.0</asciidoctorj.version>
+        <asciidoctorj.version>2.5.1</asciidoctorj.version>
         <commonmark.version>0.15.2</commonmark.version>
         <commonmark-spring-starter.version>0.0.9</commonmark-spring-starter.version>
     </properties>
