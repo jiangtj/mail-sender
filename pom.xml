@@ -15,10 +15,10 @@
     <description>A lighted extended mail sender based on spring boot</description>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
         <asciidoctorj.version>2.5.3</asciidoctorj.version>
         <commonmark.version>0.15.2</commonmark.version>
-        <commonmark-spring-starter.version>0.0.9</commonmark-spring-starter.version>
+        <commonmark-spring-starter.version>0.1.1</commonmark-spring-starter.version>
     </properties>
 
     <dependencies>
@@ -113,62 +113,8 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.asciidoctor</groupId>
-                <artifactId>asciidoctor-maven-plugin</artifactId>
-                <version>2.2.2</version>
-                <configuration>
-                    <sourceDocumentName>index.adoc</sourceDocumentName>
-                    <doctype>book</doctype>
-                    <backend>html5</backend>
-                    <attributes>
-                        <allow-uri-read>true</allow-uri-read>
-                        <attribute-missing>warn</attribute-missing>
-                    </attributes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>generate-docs</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>process-asciidoc</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.springframework.restdocs</groupId>
-                        <artifactId>spring-restdocs-asciidoctor</artifactId>
-                        <version>${spring-restdocs.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.8</version>
-                <configuration>
-                    <destFile>target/jacoco.exec</destFile>
-                    <dataFile>target/jacoco.exec</dataFile>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>jacoco-initialize</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>jacoco-site</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
