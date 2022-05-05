@@ -23,7 +23,7 @@ public class TemplateHandler {
 
     public TemplateHandler(TemplateProperties properties) throws IOException {
         String version = properties.getVersion();
-        Configuration cfg = new Configuration(StringUtils.hasLength(version) ? Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS : new Version(version));
+        Configuration cfg = new Configuration(StringUtils.hasLength(version) ? new Version(version) : Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
         cfg.setDirectoryForTemplateLoading(ResourceUtils.getFile(properties.getDir()));
         cfg.setDefaultEncoding(properties.getEncode());
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
@@ -35,7 +35,7 @@ public class TemplateHandler {
 
     public String handle(String name, Map<String,Object> params) {
         StringWriter writer = new StringWriter();
-        if (StringUtils.hasLength(name)) {
+        if (!StringUtils.hasLength(name)) {
             return (String) params.get("body");
         }
         if (!name.contains(".")) {

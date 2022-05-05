@@ -1,7 +1,6 @@
 package com.jiangtj.mailsender;
 
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -18,7 +17,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @SpringBootTest
 @AutoConfigureWebTestClient
-@AutoConfigureRestDocs(uriPort = 9898)
 @ExtendWith({MailSenderExtension.class})
 public @interface ApplicationTest {
 }
