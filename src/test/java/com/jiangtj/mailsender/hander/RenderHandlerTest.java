@@ -1,6 +1,6 @@
 package com.jiangtj.mailsender.hander;
 
-import com.jiangtj.common.commonmarkspringstarter.Commonmarks;
+import com.jiangtj.common.commonmarkspringstarter.CommonMark;
 import com.jiangtj.mailsender.render.AsciidocRender;
 import com.jiangtj.mailsender.render.MarkdownRender;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ class RenderHandlerTest {
     @ParameterizedTest
     @ValueSource(strings = {"md", "markdown"})
     void testMarkdown(String renderName) {
-        renderHandler = new RenderHandler(Collections.singletonList(new MarkdownRender(new Commonmarks(
+        renderHandler = new RenderHandler(Collections.singletonList(new MarkdownRender(new CommonMark(
                 Parser.builder().build(),
                 HtmlRenderer.builder().build()
         ))));

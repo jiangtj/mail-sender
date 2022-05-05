@@ -12,8 +12,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
 
 @Slf4j
 @ApplicationTest
@@ -47,22 +45,7 @@ class MailSenderApplicationTests {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Result.class)
-                .value(result -> assertEquals(result.getStatus(), HttpStatus.OK))
-                .consumeWith(document("send",
-                        requestFields(
-                                fieldWithPath("to").description("Send mail address."),
-                                fieldWithPath("subject").description("Mail title."),
-                                fieldWithPath("render").description("Render engine name, available value: md,markdown,adoc,asciidoc.").optional(),
-                                fieldWithPath("content").description("Need rendered content."),
-                                fieldWithPath("template.name").description("Template name, should be simple now.").optional(),
-                                fieldWithPath("template.params").description("Template params, it is used when rendering template.").optional()
-                        ),
-                        responseFields(
-                                fieldWithPath("status").description("Http status."),
-                                fieldWithPath("message").type("String").optional().description("Some info for fail reason or others."),
-                                fieldWithPath("time").type("String").description("Response time.")
-                        )
-                ));
+                .value(result -> assertEquals(result.getStatus(), HttpStatus.OK));
     }
 
     @Test
