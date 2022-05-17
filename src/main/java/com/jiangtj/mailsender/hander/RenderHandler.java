@@ -2,10 +2,12 @@ package com.jiangtj.mailsender.hander;
 
 import com.jiangtj.mailsender.KeyValue;
 import com.jiangtj.mailsender.render.Render;
-import lombok.Getter;
+import com.jiangtj.mailsender.render.TextRender;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +18,12 @@ import java.util.stream.Collectors;
  * 2019/9/12 20:37 End.
  */
 @Slf4j
+@Service
 public class RenderHandler {
 
-    @Getter
+    @Resource
+    private TextRender textRender;
+
     private final Map<String, Render> renders;
 
     public RenderHandler(List<Render> renders){
@@ -43,12 +48,8 @@ public class RenderHandler {
         return names;
     }
 
-    public String render(String name, String content) {
-        Render render = renders.getOrDefault(name, null);
-        if (render == null) {
-            return content;
-        }
-        return render.render(content);
+    public Render at(String name) {
+        return renders.getOrDefault(name, textRender);
     }
 
 }

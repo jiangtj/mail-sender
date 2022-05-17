@@ -6,14 +6,15 @@ import com.jiangtj.mailsender.dto.Result;
 import com.jiangtj.mailsender.dto.SendRequestBody;
 import com.jiangtj.mailsender.dto.TemplateDto;
 import com.jiangtj.mailsender.properties.SenderProperties;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
@@ -24,19 +25,17 @@ import java.util.Map;
  * 2019/9/21 22:37 End.
  */
 @Slf4j
+@Service
 public class SenderHandler {
 
+    @Resource
     private SenderProperties properties;
-    @Setter
+    @Resource
     private RenderHandler renderHandler;
-    @Setter
+    @Resource
     private TemplateHandler templateHandler;
-    @Setter
+    @Resource
     private JavaMailSender mailSender;
-
-    public SenderHandler(SenderProperties properties) {
-        this.properties = properties;
-    }
 
     /**
      * Send mail
@@ -77,7 +76,7 @@ public class SenderHandler {
         SendRequestBody body = exchange.getRequestBody();
         String render = body.getRender();
         String content = body.getContent();
-        String renderHtml = renderHandler.render(render, content);
+        String renderHtml = renderHandler.at(render).render(content);
         exchange.setRenderedContent(renderHtml);
     }
 

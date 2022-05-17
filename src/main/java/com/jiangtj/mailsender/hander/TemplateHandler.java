@@ -5,6 +5,7 @@ import com.jiangtj.mailsender.dto.Result;
 import com.jiangtj.mailsender.properties.TemplateProperties;
 import freemarker.template.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
@@ -17,6 +18,7 @@ import java.util.Map;
  * 2019/9/18.
  */
 @Slf4j
+@Service
 public class TemplateHandler {
 
     private final Configuration cfg;

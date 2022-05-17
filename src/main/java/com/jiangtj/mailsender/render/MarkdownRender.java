@@ -1,6 +1,7 @@
 package com.jiangtj.mailsender.render;
 
 import com.jiangtj.common.commonmarkspringstarter.CommonMark;
+import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
  * Created by jiang (jiang.taojie@foxmail.com)
  * 2019/9/12 20:27 End.
  */
+@Service
 public class MarkdownRender implements Render {
 
     private final CommonMark commonMark;
