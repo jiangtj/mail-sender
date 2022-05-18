@@ -25,3 +25,17 @@ spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
 spring.mail.properties.mail.smtp.starttls.required=true
 ```
+
+### docker
+
+```shell
+docker run --name mail-sender -p 9898:9898 --restart unless-stopped \
+-e SPRING_MAIL_HOST=smtp.office365.com \
+-e SPRING_MAIL_PORT=587 \
+-e SPRING_MAIL_USERNAME=****** \
+-e SPRING_MAIL_PASSWORD=****** \
+-e SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=true \
+-e SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=true \
+-e SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_REQUIRED=true \
+-d jiangtj/mail-sender:latest
+```
