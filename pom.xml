@@ -106,6 +106,12 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <executable>true</executable>
+                    <image>
+                        <name>jiangtj/mail-sender</name>
+                        <env>
+                            <BP_JVM_VERSION>17.*</BP_JVM_VERSION>
+                        </env>
+                    </image>
                 </configuration>
             </plugin>
         </plugins>

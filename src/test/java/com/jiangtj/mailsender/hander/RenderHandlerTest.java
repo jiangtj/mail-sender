@@ -3,12 +3,14 @@ package com.jiangtj.mailsender.hander;
 import com.jiangtj.common.commonmarkspringstarter.CommonMark;
 import com.jiangtj.mailsender.render.AsciidocRender;
 import com.jiangtj.mailsender.render.MarkdownRender;
+import com.jiangtj.mailsender.render.TextRender;
 import lombok.extern.slf4j.Slf4j;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Collections;
 
@@ -27,7 +29,8 @@ class RenderHandlerTest {
     @Test
     void testErrorRender() {
         renderHandler = new RenderHandler(Collections.emptyList());
-        String html = renderHandler.render("no-render",
+        ReflectionTestUtils.setField(renderHandler, "textRender", new TextRender());
+        String html = renderHandler.at("no-render").render(
                 "test *YYYY*, [my blog](https://www.dnocm.com)");
         assertEquals(html, "test *YYYY*, [my blog](https://www.dnocm.com)");
     }
@@ -39,7 +42,7 @@ class RenderHandlerTest {
                 Parser.builder().build(),
                 HtmlRenderer.builder().build()
         ))));
-        String html = renderHandler.render(renderName,
+        String html = renderHandler.at(renderName).render(
                 "test *YYYY*, [my blog](https://www.dnocm.com)");
         assertEquals(html, "<p>test <em>YYYY</em>, <a href=\"https://www.dnocm.com\">my blog</a></p>\n");
         log.info("Render:{} tested ok !", renderName);
@@ -49,7 +52,7 @@ class RenderHandlerTest {
     @ValueSource(strings = {"adoc", "asciidoc"})
     void testAsciidoc(String renderName) {
         renderHandler = new RenderHandler(Collections.singletonList(new AsciidocRender()));
-        String html = renderHandler.render(renderName,
+        String html = renderHandler.at(renderName).render(
                 "test *YYYY*, https://www.dnocm.com[my blog]");
         assertEquals(html, "<div class=\"paragraph\">\n<p>test <strong>YYYY</strong>, <a href=\"https://www.dnocm.com\">my blog</a></p>\n</div>");
         log.info("Render:{} tested ok !", renderName);

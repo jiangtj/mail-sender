@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.mail.Address;
 import javax.mail.internet.MimeMessage;
@@ -51,7 +52,7 @@ public class MailSenderExtension implements BeforeAllCallback {
             return "okay";
         }).when(mailSenderMock).send((MimeMessage)any());
         when(mailSenderMock.createMimeMessage()).thenReturn(mailSender.createMimeMessage());
-        senderHandler.setMailSender(mailSenderMock);
+        ReflectionTestUtils.setField(senderHandler, "mailSender", mailSenderMock);
     }
 
 }
