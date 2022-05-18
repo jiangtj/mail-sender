@@ -18,8 +18,14 @@ jobs:
           distribution: zulu
           java-version: 17
           cache: maven
+          server-id: github
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
       - name: Build Image
         run: mvn spring-boot:build-image
+        env:
+          MAVEN_USERNAME: jiangtj
+          MAVEN_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
       - name: Push
         run: |
           docker login -u jiangtj -p ${{ secrets.MYPASS }}
