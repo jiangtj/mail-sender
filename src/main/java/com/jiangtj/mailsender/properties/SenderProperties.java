@@ -1,7 +1,6 @@
 package com.jiangtj.mailsender.properties;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -17,10 +16,6 @@ public class SenderProperties {
 
     @Getter
     private final TemplateProperties template;
-
-    @Setter
-    @Getter
-    private String test;
 
     public SenderProperties(MailProperties mail, TemplateProperties template) {
         this.mail = mail;
